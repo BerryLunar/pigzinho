@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pig 🐷🍓</title>
+
+<style>
+
+body{
+margin:0;
+background:#8fa3b8;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+font-family:Courier, monospace;
+}
+
+#scene{
+position:relative;
+width:100%;
+height:100%;
+}
+
+#box{
+width:150px;
+cursor:pointer;
+image-rendering:pixelated;
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+animation:pulse 1.5s infinite;
+z-index:5;
+}
+
+@keyframes pulse{
+0%{transform:translate(-50%,-50%) scale(1)}
+50%{transform:translate(-50%,-50%) scale(1.1)}
+100%{transform:translate(-50%,-50%) scale(1)}
+}
+
+.open{
+animation:openBox 1s forwards;
+}
+
+@keyframes openBox{
+to{transform:translate(-50%,-50%) scale(0) rotate(180deg);opacity:0}
+}
+
+/* carta */
+
+#letterWrap{
+position:absolute;
+left:50%;
+top:120%;
+transform:translateX(-50%);
+transition:1.2s ease;
+z-index:10;
+}
+
+#letterWrap.show{
+top:50%;
+transform:translate(-50%,-50%);
+}
+
+#scroll{
+width:420px;
+image-rendering:pixelated;
+filter:drop-shadow(0 10px 20px rgba(0,0,0,.3));
+}
+
+/* gatos */
+
+.sidecat{
+position:absolute;
+top:50%;
+width:120px;
+transform-origin:center;
+animation:dance .8s infinite alternate;
+}
+
+#catL{left:-140px}
+#catR{right:-140px}
+
+@keyframes dance{
+from{transform:translateY(-50%) rotate(-5deg)}
+to{transform:translateY(-50%) rotate(5deg)}
+}
+
+/* confete */
+
+.confetti{
+position:absolute;
+width:12px;
+height:12px;
+background:pink;
+animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+to{transform:translateY(120vh) rotate(720deg);opacity:0}
+}
+
+/* flutuantes */
+
+.float{
+position:absolute;
+bottom:-120px;
+animation:floatUp 5s linear forwards;
+image-rendering:pixelated;
+}
+
+@keyframes floatUp{
+to{transform:translateY(-120vh)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="scene">
+
+<img src="caixa.png" id="box">
+
+<div id="letterWrap">
+<img src="pergaminho.png" id="scroll">
+
+<img src="cat1.gif" class="sidecat" id="catL">
+<img src="cat2.gif" class="sidecat" id="catR">
+</div>
+
+<audio id="music">
+<source src="musica.mp3">
+</audio>
+
+</div>
+
+<script>
+
+const box = document.getElementById("box");
+const letter = document.getElementById("letterWrap");
+const music = document.getElementById("music");
+
+box.onclick = ()=>{
+
+box.classList.add("open");
+music.play();
+
+spawnFloat("pig.png",140);
+spawnFloat("morango.png",90);
+
+for(let i=0;i<6;i++) spawnFloat("cat1.gif",120);
+
+confettiBurst();
+
+setTimeout(()=>{
+letter.classList.add("show");
+},800);
+};
+
+// flutuantes
+function spawnFloat(src,size){
+let i=document.createElement("img");
+i.src=src;
+i.className="float";
+i.style.left=Math.random()*innerWidth+"px";
+i.style.width=size+"px";
+document.body.appendChild(i);
+setTimeout(()=>i.remove(),5000);
+}
+
+// confete
+function confettiBurst(){
+for(let i=0;i<40;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.style.left=innerWidth/2+Math.random()*200-100+"px";
+c.style.top="50%";
+c.style.background=`hsl(${Math.random()*360},80%,70%)`;
+c.style.animationDelay=Math.random()+"s";
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),3000);
+}
+}
+
+// parallax trash da carta
+window.addEventListener("mousemove",e=>{
+if(!letter.classList.contains("show")) return;
+let x=(e.clientX-innerWidth/2)/40;
+let y=(e.clientY-innerHeight/2)/40;
+letter.style.transform=`translate(-50%,-50%) translate(${x}px,${y}px)`;
+});
+
+</script>
+
+</body>
+</html>
