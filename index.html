@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Pig - Surpresa de Aniversário 🍓</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #7b8fa1 0%, #8fa3b8 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', 'Courier', monospace;
+            color: #2c3e50;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ========== TELA INICIAL ========== */
+        .initial-screen {
+            text-align: center;
+            opacity: 1;
+            transition: opacity 0.8s ease-out;
+            pointer-events: auto;
+            z-index: 50;
+        }
+
+        .initial-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .initial-text {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+        }
+
+        .gift-box {
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            animation: pulse 1.5s ease-in-out infinite;
+            filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.2));
+            transition: transform 0.1s;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            position: relative;
+            z-index: 51;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.05);
+        }
+
+        .gift-box.opening {
+            animation: openBox 0.8s ease-out forwards;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes openBox {
+            0% {
+                transform: scale(1) rotateZ(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.1) rotateZ(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========== ELEMENTOS FLUTUANTES ========== */
+        .floating-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .floating-item {
+            position: absolute;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        /* Gatos saindo dos lados da caixa */
+        .cat-side-left {
+            width: 100px;
+            height: 100px;
+            animation: slideLeft 2s ease-in-out forwards;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+        }
+
+        .cat-side-right {
+            width: 100px;
+            height: 100px;
+            animation: slideRight 2s ease-in-out forwards;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+        }
+
+        /* Gatos flutuando (originais) */
+        .cat-floating {
+            width: 80px;
+            height: 80px;
+            animation: float-up 4s ease-in forwards;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+        }
+
+        .pig-floating {
+            width: 100px;
+            height: 100px;
+            animation: bounce-in 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.15));
+        }
+
+        .strawberry-floating {
+            width: 60px;
+            height: 60px;
+            animation: bounce-in 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation-delay: 0.2s;
+            filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.15));
+        }
+
+        /* Confete */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+        }
+
+        .confetti-piece {
+            width: 100%;
+            height: 100%;
+            background: #ff6b6b;
+        }
+
+        .confetti.type-2 .confetti-piece {
+            background: #ffd93d;
+        }
+
+        .confetti.type-3 .confetti-piece {
+            background: #6bcf7f;
+        }
+
+        .confetti.type-4 .confetti-piece {
+            background: #4d96ff;
+        }
+
+        @keyframes slideLeft {
+            0% {
+                transform: translateX(0) translateY(0) rotateZ(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-300px) translateY(-200px) rotateZ(-30deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideRight {
+            0% {
+                transform: translateX(0) translateY(0) rotateZ(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(300px) translateY(-200px) rotateZ(30deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotateZ(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotateZ(20deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0) translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotateZ(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotateZ(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========== CARTA COM GLITCH + PARALLAX ========== */
+        .letter-container {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateY(50px);
+            z-index: 100;
+            max-height: 80vh;
+            width: 90%;
+            max-width: 550px;
+        }
+
+        .letter-container.visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Efeito Glitch no background */
+        .letter {
+            background: #cfd8e3;
+            padding: 3rem 2.5rem;
+            border: 3px solid #2c3e50;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #2c3e50;
+            text-align: left;
+            word-wrap: break-word;
+            overflow-y: auto;
+            max-height: 70vh;
+            position: relative;
+            animation: glitch-background 0.3s ease-out;
+        }
+
+        /* Glitch Animation */
+        @keyframes glitch-background {
+            0% {
+                background: #cfd8e3;
+                box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+            }
+            25% {
+                background: #d5dce8;
+                box-shadow: -3px 3px 0px #ff006e;
+            }
+            50% {
+                background: #cfd8e3;
+                box-shadow: 3px -3px 0px #00d9ff;
+            }
+            75% {
+                background: #d5dce8;
+                box-shadow: -2px 2px 0px #ffbe0b;
+            }
+            100% {
+                background: #cfd8e3;
+                box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        /* Parallax para o texto dentro da carta */
+        .letter-content {
+            position: relative;
+        }
+
+        .letter-paragraph {
+            position: relative;
+            transform: translateZ(0);
+        }
+
+        .letter-photo-wrapper {
+            position: relative;
+            margin-top: 1.5rem;
+        }
+
+        .letter img {
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #2c3e50;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            display: block;
+        }
+
+        .letter p {
+            margin-bottom: 1rem;
+        }
+
+        .letter p:first-of-type::first-letter {
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-style: italic;
+            margin-top: 1.5rem;
+            color: #c94277;
+            font-weight: bold;
+        }
+
+        /* ========== RESPONSIVIDADE ========== */
+        @media (max-width: 768px) {
+            .initial-text {
+                font-size: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .gift-box {
+                width: 100px;
+                height: 100px;
+            }
+
+            .letter {
+                padding: 2rem 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .cat-side-left,
+            .cat-side-right {
+                width: 70px;
+                height: 70px;
+            }
+
+            @keyframes slideLeft {
+                0% {
+                    transform: translateX(0) translateY(0) rotateZ(0deg);
+                }
+                100% {
+                    transform: translateX(-150px) translateY(-150px) rotateZ(-30deg);
+                }
+            }
+
+            @keyframes slideRight {
+                0% {
+                    transform: translateX(0) translateY(0) rotateZ(0deg);
+                }
+                100% {
+                    transform: translateX(150px) translateY(-150px) rotateZ(30deg);
+                }
+            }
+        }
+
+        @media (max-width: 480px) {
+            .initial-text {
+                font-size: 1.2rem;
+            }
+
+            .letter {
+                font-size: 0.9rem;
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Scrollbar personalizada */
+        .letter::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .letter::-webkit-scrollbar-track {
+            background: #a8b5c4;
+        }
+
+        .letter::-webkit-scrollbar-thumb {
+            background: #2c3e50;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela Inicial -->
+    <div class="initial-screen" id="initialScreen">
+        <p class="initial-text">Pig… tem um presente aqui pra você 🐷🍓</p>
+        <img src="caixa.png" alt="Caixa de Presente" class="gift-box" id="giftBox">
+    </div>
+
+    <!-- Container para elementos flutuantes -->
+    <div class="floating-container" id="floatingContainer"></div>
+
+    <!-- Carta -->
+    <div class="letter-container" id="letterContainer">
+        <div class="letter" id="letterScroll">
+            <div class="letter-content">
+                <p class="letter-paragraph">Pig,</p>
+                <p class="letter-paragraph">
+                    eu sei que você não faz questão dessas coisas, mas eu faço questão de você.
+                </p>
+                <p class="letter-paragraph">
+                    no meu aniversário você fez tanta coisa… então isso aqui é só minha forma simples de retribuir.
+                </p>
+                <p class="letter-paragraph">
+                    obrigada por existir, por ser meu porquinho favorito 🐷 e me aguentar sendo moonzinha/morango 🍓
+                </p>
+                <p class="letter-paragraph">
+                    feliz vida 🤍
+                </p>
+                <p class="letter-paragraph letter-signature">com amor, moonzinha 🍓</p>
+                <div class="letter-photo-wrapper">
+                    <img src="foto.jpg" alt="Nossa foto juntos" id="letterPhoto">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Áudio -->
+    <audio id="birthdayMusic" preload="auto">
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ========== CONFIGURAÇÃO GERAL ==========
+        const config = {
+            initialScreenId: 'initialScreen',
+            giftBoxId: 'giftBox',
+            floatingContainerId: 'floatingContainer',
+            letterContainerId: 'letterContainer',
+            letterScrollId: 'letterScroll',
+            musicId: 'birthdayMusic',
+            letterPhotoId: 'letterPhoto',
+            maxCatsPerClick: 8,
+            letterAppearDelay: 1000,
+            confettiStartDelay: 2500,
+            assetPaths: {
+    catLeft: 'cat1.gif',
+    catRight: 'cat2.jpg',
+    catFloat: 'cat1.gif',
+    pig: 'pig.png',
+    strawberry: 'morango.png'
+}
+        };
+
+        // ========== STATE ==========
+        let hasBeenOpened = false;
+
+        // ========== UTILITÁRIOS ==========
+        function getElement(id) {
+            return document.getElementById(id);
+        }
+
+        function createImage(src, className, alt = 'Image') {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = alt;
+            img.className = `floating-item ${className}`;
+            return img;
+        }
+
+        function getRandomNumber(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // ========== SPAWN DE ELEMENTOS FLUTUANTES ==========
+
+        // Dois gatos saindo dos lados
+        function spawnSideGates() {
+    const container = getElement(config.floatingContainerId);
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    const catLeft = createImage(config.assetPaths.catLeft, 'cat-side-left', 'Gato esquerdo');
+    catLeft.style.left = (centerX - 60) + 'px';
+    catLeft.style.top = (centerY - 50) + 'px';
+    container.appendChild(catLeft);
+
+    const catRight = createImage(config.assetPaths.catRight, 'cat-side-right', 'Gato direito');
+    catRight.style.right = (centerX - 60) + 'px';
+    catRight.style.top = (centerY - 50) + 'px';
+    container.appendChild(catRight);
+
+    setTimeout(() => {
+        catLeft.remove();
+        catRight.remove();
+    }, 2000);
+}
+
+
+        function spawnFloatingCats() {
+            const container = getElement(config.floatingContainerId);
+            const count = getRandomInt(5, config.maxCatsPerClick);
+
+            for (let i = 0; i < count; i++) {
+                const cat = createImage(config.assetPaths.catFloat, 'cat-floating', 'Gato dançando');
+                const startX = getRandomNumber(0, window.innerWidth);
+                const animationDuration = getRandomNumber(3, 5);
+
+                cat.style.left = startX + 'px';
+                cat.style.bottom = '-100px';
+                cat.style.animationDuration = animationDuration + 's';
+                cat.style.animationDelay = (i * 0.1) + 's';
+
+                container.appendChild(cat);
+
+                setTimeout(() => {
+                    cat.remove();
+                }, animationDuration * 1000);
+            }
+        }
+
+        function spawnPigAndStrawberry() {
+            const container = getElement(config.floatingContainerId);
+
+            const pig = createImage(config.assetPaths.pig, 'pig-floating', 'Porquinho');
+            pig.style.left = (window.innerWidth / 2 - 50) + 'px';
+            pig.style.top = (window.innerHeight / 2 - 50) + 'px';
+            container.appendChild(pig);
+
+            const strawberry = createImage(config.assetPaths.strawberry, 'strawberry-floating', 'Morango');
+            strawberry.style.right = (window.innerWidth / 2 - 30) + 'px';
+            strawberry.style.top = (window.innerHeight / 2 + 50) + 'px';
+            container.appendChild(strawberry);
+        }
+
+        // ========== CONFETE ==========
+        function createConfetti() {
+            const container = getElement(config.floatingContainerId);
+            const confettiCount = 50;
+            const types = ['', 'type-2', 'type-3', 'type-4'];
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = `confetti ${types[Math.floor(Math.random() * types.length)]}`;
+                confetti.innerHTML = '<div class="confetti-piece"></div>';
+
+                const startX = getRandomNumber(0, window.innerWidth);
+                const duration = getRandomNumber(2.5, 4);
+                const delay = getRandomNumber(0, 0.3);
+
+                confetti.style.left = startX + 'px';
+                confetti.style.top = '-20px';
+                confetti.style.animation = `confetti-fall ${duration}s linear ${delay}s forwards`;
+
+                container.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, (duration + delay) * 1000);
+            }
+        }
+
+        // ========== SCROLL PARALLAX ==========
+        function setupParallax() {
+            const letterScroll = getElement(config.letterScrollId);
+            const paragraphs = letterScroll.querySelectorAll('.letter-paragraph');
+            const photoWrapper = letterScroll.querySelector('.letter-photo-wrapper');
+
+            letterScroll.addEventListener('scroll', () => {
+                const scrollY = letterScroll.scrollTop;
+
+                // Parallax leve nos parágrafos
+                paragraphs.forEach((p, index) => {
+                    const offset = scrollY * (0.1 + index * 0.02);
+                    p.style.transform = `translateY(${offset}px)`;
+                });
+
+                // Parallax na foto
+                if (photoWrapper) {
+                    const photoOffset = scrollY * 0.15;
+                    photoWrapper.style.transform = `translateY(${photoOffset}px)`;
+                }
+            });
+        }
+
+        // ========== HANDLERS ==========
+        function onGiftBoxClick() {
+            if (hasBeenOpened) return;
+            hasBeenOpened = true;
+
+            const initialScreen = getElement(config.initialScreenId);
+            const giftBox = getElement(config.giftBoxId);
+            const music = getElement(config.musicId);
+
+            // Animação de abertura da caixa
+            giftBox.classList.add('opening');
+
+            // Iniciar música
+            music.play().catch(() => {
+                console.warn('Autoplay de áudio bloqueado pelo navegador.');
+            });
+
+            // Spawn gatos dos lados
+            spawnSideGates();
+
+            // Spawn gatos flutuantes
+            spawnFloatingCats();
+
+            // Spawn porquinho + morango
+            spawnPigAndStrawberry();
+
+            // Esconder tela inicial
+            setTimeout(() => {
+                initialScreen.classList.add('hidden');
+            }, 500);
+
+            // Mostrar carta
+            setTimeout(() => {
+                const letterContainer = getElement(config.letterContainerId);
+                letterContainer.classList.add('visible');
+
+                // Setup parallax após carta estar visível
+                setTimeout(() => {
+                    setupParallax();
+                }, 100);
+            }, config.letterAppearDelay);
+
+            // Confete final
+            setTimeout(() => {
+                createConfetti();
+            }, config.confettiStartDelay);
+        }
+
+        // ========== INIT ==========
+        function init() {
+            const giftBox = getElement(config.giftBoxId);
+            giftBox.addEventListener('click', onGiftBoxClick);
+
+            giftBox.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                onGiftBoxClick();
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
